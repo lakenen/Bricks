@@ -211,5 +211,57 @@ BRICK.fourway.prototype = new BRICK.modSquare();
 BRICK.fourway.prototype.constructor = BRICK.fourway;
 
 BRICK.tap=function(colorCode){
+    THREE.Object3D.call( this );
+    var faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face}); 
+    
+    //base
+    
+    var stud=new THREE.Mesh(new THREE.CylinderGeometry(8,8, 4, 32, 4), faceMaterial);    
+    stud.matrixAutoUpdate = false;
+    stud.updateMatrix();
+    this.add(stud);
+    
+    //indent
+    
+    var ind=new THREE.Mesh(new THREE.CylinderGeometry(6,8, 4, 32, 2), faceMaterial);
+    ind.position.y=4;     
+    ind.matrixAutoUpdate = false;
+    ind.updateMatrix();
+    this.add(ind);
+    
+    //main
+    var main=new THREE.Mesh(new THREE.CylinderGeometry(4,4, 22, 32, 2), faceMaterial);
+    main.position.y=10;
+    main.matrixAutoUpdate = false;
+    main.updateMatrix();
+    this.add(main);  
+    
+    //top
+   var top=new THREE.Mesh(new THREE.CylinderGeometry(6,6, 4, 32, 2), faceMaterial);
+   top.position.y=22;
+   top.matrixAutoUpdate = false;
+   top.updateMatrix();
+   this.add(top); 
+   
+   var hose1  = new THREE.Mesh(new THREE.CylinderGeometry(3,3, 7, 32, 2), faceMaterial);
+   hose1.rotation.z=90 * ( Math.PI / 180 );
+   hose1.position.y=17;
+   hose1.position.x=-6;
+   this.add(hose1); 
+   
+    var hose2  = new THREE.Mesh(new THREE.CylinderGeometry(2,3, 3, 32, 2), faceMaterial);
+    hose2.rotation.z=90 * ( Math.PI / 180 );
+    hose2.position.y=17;
+    hose2.position.x=-11;
+    this.add(hose2);   
+    
+    var hose3  = new THREE.Mesh(new THREE.CylinderGeometry(3,3, 2, 32, 2), faceMaterial);
+    hose3.rotation.z=90 * ( Math.PI / 180 );
+    hose3.position.y=17;
+    hose3.position.x=-14;
+    this.add(hose3);  
     
 }
+
+BRICK.tap.prototype = new THREE.Object3D();
+BRICK.tap.prototype.constructor = BRICK.tap;
