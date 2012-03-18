@@ -12,10 +12,10 @@
 
 var BRICK={};
 
-//Brick colour mapper, uses LDraw colour standard
+//Brick colour mapper, uses LDraw colour standard TODO:full list
 
 BRICK.color=function(val){
-    //=default to 7
+    //=default to 7/grey
     val= val || 7;
     
     var codes={
@@ -31,12 +31,13 @@ BRICK.color=function(val){
 BRICK.colorCode=function(string){
     string=string.toLower();
     var map={
-        'grey':7,
         'black':0,
-        'white':15,
         'blue':1,
-        'green':2
+        'green':2,
+        'grey':7,
+        'white':15
     }
+    return map[string];
 }
 
 //round
@@ -68,6 +69,8 @@ BRICK.round=function(colorCode, height){
 
 BRICK.round.prototype = new THREE.Object3D();
 BRICK.round.prototype.constructor = BRICK.round;
+
+//Basic flat plate
 
 BRICK.plate=function(colorCode, w, d){
     w = w || 1;
@@ -124,48 +127,89 @@ BRICK.square=function(colorCode, w, d, h){
 BRICK.square.prototype = new THREE.Object3D();
 BRICK.square.prototype.constructor = BRICK.square;
 
+//Basic modified plate class
+
+BRICK.modSquare=function(colorCode){
+    
+    THREE.Object3D.call( this );
+    this.faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
+
+}
+
+BRICK.modSquare.prototype = new THREE.Object3D();
+BRICK.modSquare.prototype.constructor = BRICK.modSquare;
+
+BRICK.modSquare.prototype.getStud=function(height, dia, y){
+    var mesh=new THREE.Mesh(new THREE.CylinderGeometry(dia, dia, height, 32, height), this.faceMaterial);
+    
+    mesh.position.y=y+(height/2);
+    mesh.matrixAutoUpdate = false;
+    mesh.updateMatrix();
+    return mesh;
+}
+
+
 BRICK.headlight=function(colorCode){
     THREE.Object3D.call( this );
-    
-    var faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face}); 
-    
-    var mesh=new THREE.Mesh(new THREE.CubeGeometry(16,24,20), faceMaterial);
+    BRICK.modSquare.call( this );
+    //main
+    var mesh=new THREE.Mesh(new THREE.CubeGeometry(16,24,20), this.faceMaterial);
     mesh.position.y=(24)/2;
     mesh.matrixAutoUpdate = false;
     mesh.updateMatrix();
     this.add(mesh);
-    
-    var mesh=new THREE.Mesh(new THREE.CubeGeometry(4,4,20), faceMaterial);
+    //lip
+    var mesh=new THREE.Mesh(new THREE.CubeGeometry(4,4,20), this.faceMaterial);
     mesh.position.y=2;
     mesh.position.x=16/2+2
     mesh.matrixAutoUpdate = false;
     mesh.updateMatrix();
     this.add(mesh);  
-    this.add(getStud(4, 6, 20+4));
-    
-    var rot=getStud(4,6,10);
-    
+    //to stud
+    this.add(this.getStud(4, 6, 20+4));
+    //side stud
+    var rot=this.getStud(4,6,10);
     rot.rotation.x=90 * ( Math.PI / 180 );
     rot.rotation.z=90 * ( Math.PI / 180 );
-    rot.position.x=16/2+2;
+    rot.position.x=16/2+4;
     rot.position.y=13; 
-    rot.matrixAutoUpdate = false;
     rot.updateMatrix();
     this.add(rot);
-    
-    
-    function getStud(height, dia, y){
-        var mesh=new THREE.Mesh(new THREE.CylinderGeometry(dia, dia, height, 32, height), faceMaterial);
-        
-        mesh.position.y=y+(height/2);
-        mesh.matrixAutoUpdate = false;
-        mesh.updateMatrix();
-        return mesh;
-    }
-      
 
 }
 
-BRICK.headlight.prototype = new THREE.Object3D();
+BRICK.headlight.prototype = new BRICK.modSquare();
 BRICK.headlight.prototype.constructor = BRICK.headlight;
 
+BRICK.fourway=function(colorCode){
+    THREE.Object3D.call( this );  
+    this.faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
+    //main
+    var mesh=new THREE.Mesh(new THREE.CubeGeometry(20,24,20), this.faceMaterial);
+    mesh.position.y=(24)/2;
+    mesh.matrixAutoUpdate = false;
+    mesh.updateMatrix();
+    this.add(mesh);
+    //top stud
+    this.add(this.getStud(4, 6, 20+4));
+    //side studs TODO need to be hollow not solid
+    var posx=[0,12,0,-12]
+    var posz=[12,0,-12,0]
+    for (var i=0; i<4; i++){
+        var rot=this.getStud(4,6,10);
+        rot.rotation.x=90 * ( Math.PI / 180 );
+        rot.rotation.z=i*90 * ( Math.PI / 180 );
+        rot.position.x=posx[i];
+        rot.position.z=posz[i];
+        rot.position.y=13; 
+        rot.updateMatrix();
+        this.add(rot);
+    }
+}
+
+BRICK.fourway.prototype = new BRICK.modSquare();
+BRICK.fourway.prototype.constructor = BRICK.fourway;
+
+BRICK.tap=function(colorCode){
+    
+}
