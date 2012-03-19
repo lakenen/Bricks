@@ -63,6 +63,8 @@
 <script src="brick.geo.js" type="text/javascript"></script>
 <script>
 
+webgl = ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )()
+
 // set the scene size
 var WIDTH = 600,
   HEIGHT = 400;
@@ -74,8 +76,12 @@ var VIEW_ANGLE = 45,
   FAR = 10000;
 
 // create a WebGL renderer, camera and a scene
+if(webgl){
 var renderer = new THREE.WebGLRenderer();
-
+}
+else{
+var renderer = new THREE.CanvasRenderer()
+}
 var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 camera.position.set(120, 120, 110);
 camera.lookAt(new THREE.Vector3(0,0,0));
