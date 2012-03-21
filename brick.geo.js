@@ -349,3 +349,34 @@ BRICK.clip=function(colorCode){
 
 BRICK.clip.prototype = new THREE.Object3D();
 BRICK.clip.prototype.constructor = BRICK.clip;
+
+BRICK.tpiece=function(colorCode){
+    THREE.Object3D.call( this );  
+    faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
+    
+    var pipe=new THREE.Mesh(new THREE.CylinderGeometry(2.5,2.5, 26, 32, 4), faceMaterial);
+    pipe.position.y=13;
+    pipe.matrixAutoUpdate = false;
+    pipe.updateMatrix();
+    this.add(pipe);
+    
+    var pipe2=new THREE.Mesh(new THREE.CylinderGeometry(2.5,2.5, 9, 32, 4), faceMaterial);
+    
+    pipe2.rotation.x=90 * ( Math.PI / 180 );
+    pipe2.position.z=8;
+    pipe2.position.y=13;
+    pipe2.matrixAutoUpdate = false;
+    pipe2.updateMatrix();
+    
+    this.add(pipe2);
+    
+    var sph=new THREE.Mesh(new THREE.SphereGeometry(4.2, 12, 12), faceMaterial);
+    sph.position.y=13;
+    sph.matrixAutoUpdate = false;
+    sph.updateMatrix();
+    this.add(sph);
+    
+}
+
+BRICK.tpiece.prototype = new THREE.Object3D();
+BRICK.tpiece.prototype.constructor = BRICK.tpiece;
