@@ -65,16 +65,21 @@ scene.add(pointLight);
 
 var brick=new BRICK.square();
 var brick2=new BRICK.fourway(1, 3, 3);
-var brick3=new BRICK.tap();
+var brick3=new BRICK.clip();
+var brick4=new BRICK.tap();
+
 
 brick2.position.x=-60;
 brick2.rotation.y=       45 * ( Math.PI / 180 );
 
-brick3.position.x=60;
+brick3.position.x=40;
+brick4.position.x=80;
+
 
 scene.add(brick);
 scene.add(brick2);
 scene.add(brick3);
+scene.add(brick4);
 
 renderer.render(scene, camera);
 

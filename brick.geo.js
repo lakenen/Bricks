@@ -265,3 +265,87 @@ BRICK.tap=function(colorCode){
 
 BRICK.tap.prototype = new THREE.Object3D();
 BRICK.tap.prototype.constructor = BRICK.tap;
+
+BRICK.miniSlope=function(colorCode){
+    THREE.Object3D.call( this );  
+    this.faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
+    
+    var extrudeSettings = { amount: 20, bevelEnabled: false, steps: 4, material: 0, extrudeMaterial: 1 };
+    
+    var side = new THREE.Shape();
+    side.moveTo(  0, 0 );
+    side.lineTo(  20, 0 );
+    side.lineTo( 20, 4 );
+    side.lineTo( 0, 14 );
+    side.lineTo(0,0);
+    
+
+    var geo = side.extrude( extrudeSettings );
+	geo.computeVertexNormals();
+
+	THREE.GeometryUtils.center( geo );
+	var mesh=new THREE.Mesh( geo, this.faceMaterial );
+	mesh.position.y=7;
+	mesh.matrixAutoUpdate = false;
+	mesh.updateMatrix();
+	this.add(mesh);
+}
+BRICK.miniSlope.prototype = new THREE.Object3D();
+BRICK.miniSlope.prototype.constructor = BRICK.miniSlope;
+
+
+BRICK.clip=function(colorCode){
+    THREE.Object3D.call( this );  
+    this.faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
+    
+    this.add(new BRICK.square(colorCode, 1, 1, 1));
+    
+    var extrudeSettings = { amount: 8, bevelEnabled: false, steps: 1, material: 0, extrudeMaterial: 0 };
+    
+    var clip = new THREE.Shape();
+    
+    clip.moveTo(3.696,-21.531)
+    clip.lineTo(-3.696,-21.531 );      
+    clip.lineTo(-3.696, -24 );      
+    clip.lineTo( -7.584, -24);      
+    clip.lineTo( -7.584, -19);    
+    clip.lineTo(  -7.199, -17.5 );
+    clip.lineTo(  -6.5, -16 );
+    clip.lineTo(  -5.40, -14.5 );
+    clip.lineTo(  -4.75, -13 ); 
+    clip.lineTo( -4.75, -10);   
+    clip.lineTo( 4.75, -10);
+    clip.lineTo( 4.75, -13);
+    clip.lineTo( 5.40, -14.5);
+    clip.lineTo( 6.5, -16);
+    clip.lineTo( 7.199, -17.5);
+    clip.lineTo(7.584, -19 );
+    clip.lineTo( 7.584, -24);
+    clip.lineTo(3.696,-24 );    
+    clip.lineTo(4,-19)
+    clip.lineTo( 3.696, -17.5);
+    clip.lineTo( 0, -16);    
+    clip.lineTo( -3.696, -17.5);
+    clip.lineTo(-4,-19)
+    
+       
+    
+    
+    var geo = clip.extrude( extrudeSettings );
+    geo.computeVertexNormals();
+    
+    THREE.GeometryUtils.center( geo );
+    var mesh=new THREE.Mesh( geo, this.faceMaterial );
+    mesh.matrixAutoUpdate = false;
+    mesh.rotation.x=90 * ( Math.PI / 180 );
+    mesh.rotation.z=90 * ( Math.PI / 180 );
+    
+    mesh.position.y=4;
+    mesh.position.x=16;
+    mesh.updateMatrix();
+    this.add(mesh);   
+
+}
+
+BRICK.clip.prototype = new THREE.Object3D();
+BRICK.clip.prototype.constructor = BRICK.clip;
