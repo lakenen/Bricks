@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<title></title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+    body{
+				background-color: #f0f0f0;
+    }
+    </style>
+</head>
+<body>
+
+<div id="container">
+	
+</div> <!--! end of #container -->
+
+<script src="../threejs/build/Three.js" type="text/javascript"></script>
+<script src="../brick.geo.js" type="text/javascript"></script>
+<script>
+
+// set the scene size
+var WIDTH = 600,
+  HEIGHT = 400;
+
+// set some camera attributes
+var VIEW_ANGLE = 45,
+  ASPECT = WIDTH / HEIGHT,
+  NEAR = 0.1,
+  FAR = 10000;
+
+// create a WebGL renderer, camera and a scene
+var renderer = new THREE.WebGLRenderer();
+
+var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+camera.position.set(120, 120, 110);
+camera.lookAt(new THREE.Vector3(0,0,0));
+
+var scene = new THREE.Scene();
+scene.add(camera);
+
+renderer.setSize(WIDTH, HEIGHT);
+
+// attach the render-supplied DOM element
+document.getElementById('container').appendChild(renderer.domElement);
+    
+// create a point light
+var pointLight = new THREE.PointLight(0xFFFFFF);
+pointLight.position.x = 10;
+pointLight.position.y = 50;
+pointLight.position.z = 50;
+scene.add(pointLight);
+
+var pointLight = new THREE.PointLight(0xFFFFFF);
+pointLight.position.x = -50;
+pointLight.position.y = -50;
+pointLight.position.z = -50;
+scene.add(pointLight);
+
+
+//mecha
+
+var mechbody=new THREE.Object3D();
+
+var cen=new BRICK.fourway(15), t1=new BRICK.tap(15), t2=new BRICK.tap(15), t3=new BRICK.tap(15), t4=new BRICK.tap(15);
+
+mechbody.add(cen);
+
+t1.rotation.y=180 * ( Math.PI / 180 );
+t1.position.x=-24;
+t1.position.y=-4;
+
+mechbody.add(t1);
+
+t2.position.x=24;
+t2.position.y=-4;
+mechbody.add(t2);
+
+t3.rotation.y=-90 * ( Math.PI / 180 );
+
+t3.position.y=-4;
+t3.position.z=24;
+mechbody.add(t3);
+
+t4.rotation.y=90 * ( Math.PI / 180 );
+t4.position.y=-4;
+t4.position.z=-24;
+mechbody.add(t4);
+
+var clip=new BRICK.clip(15);
+clip.position.y=23;
+clip.rotation.y=45*( Math.PI / 180 );
+mechbody.add(clip);
+
+var headl=new BRICK.headlight(15);
+headl.position.y=-25;
+headl.rotation.y=45*( Math.PI / 180 );
+
+mechbody.add(headl);
+
+var plate=new BRICK.plate(15, 2);
+plate.position.y=31;
+plate.position.z=7;
+plate.position.x=-7;
+
+plate.rotation.y=45*( Math.PI / 180 );
+mechbody.add(plate);
+
+scene.add(mechbody);
+
+var arm=new THREE.Object3D();
+var h=new BRICK.hinge(15);
+//h.rotation.x=90*( Math.PI / 180 );
+
+var hand=new BRICK.topclip(0);
+hand.position.y=8;
+hand.position.z=-32;
+
+var shol=new BRICK.topclip(15);
+shol.position.z=30;
+shol.position.x=-22;
+shol.position.y=8;
+shol.rotation.y=135*( Math.PI / 180 );
+
+
+arm.add(hand);
+arm.add(h);
+arm.add(shol);
+
+arm.rotation.z=90*( Math.PI / 180 );
+arm.rotation.x=45*( Math.PI / 180 );
+arm.position.x=45;
+arm.position.y=40;
+arm.position.z=-5;
+
+scene.add(arm);
+
+
+var arm2=new THREE.Object3D();
+var h2=new BRICK.hinge(15);
+//h.rotation.x=90*( Math.PI / 180 );
+
+var hand2=new BRICK.topclip(15);
+hand2.rotation.y=90*( Math.PI / 180 );
+
+hand2.position.y=8;
+hand2.position.z=-32;
+
+var shol2=new BRICK.topclip(0);
+shol2.position.z=30;
+shol2.position.x=-22;
+shol2.position.y=8;
+shol2.rotation.y=135*( Math.PI / 180 );
+
+
+arm2.add(hand2);
+arm2.add(h2);
+arm2.add(shol2);
+
+arm2.rotation.z=-90*( Math.PI / 180 );
+arm2.rotation.y=-45*( Math.PI / 180 );
+
+arm2.position.x=-40;
+arm2.position.y=8 ;
+arm2.position.z=-15;
+
+scene.add(arm2);
+//endmecha
+
+renderer.render(scene, camera);
+
+var controls = new THREE.TrackballControls( camera );
+
+controls.rotateSpeed = 1.0;
+controls.zoomSpeed = 1.2;
+controls.panSpeed = 0.8;
+
+controls.noZoom = false;
+controls.noPan = false;
+
+controls.staticMoving = true;
+controls.dynamicDampingFactor = 0.3;
+
+animate();
+
+
+function animate() {
+	requestAnimationFrame( animate );
+	render();
+}
+
+function render() {
+	controls.update();
+	renderer.render( scene, camera );
+}
+
+</script>
+</body>
+</html>

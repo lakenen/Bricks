@@ -52,9 +52,9 @@ BRICK.round=function(colorCode, height){
     
     var edgeMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).edge});
     
-    this.add(getMesh(4, 8, height+4));
-    this.add(getMesh(height, 12, 4));
-    this.add(getMesh(2, 10, 0));
+    this.add(getMesh(4, 6, height+2));
+    this.add(getMesh(height, 10, 4));
+    this.add(getMesh(2, 8, 2));
     
     function getMesh(height, dia, y){
         var mesh=new THREE.Mesh(new THREE.CylinderGeometry(dia, dia, height, 32, height), faceMaterial);
@@ -80,7 +80,7 @@ BRICK.plate=function(colorCode, w, d){
     var faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face}); 
     
     var mesh=new THREE.Mesh(new THREE.CubeGeometry(20*w,8,20*d), faceMaterial);
-    mesh.position.y=(8*h)/2;
+    mesh.position.y=4;
     mesh.matrixAutoUpdate = false;
     mesh.updateMatrix();
     this.add(mesh);
@@ -152,6 +152,7 @@ BRICK.modSquare.prototype.getStud=function(height, dia, y){
 BRICK.headlight=function(colorCode){
     THREE.Object3D.call( this );
     BRICK.modSquare.call( this );
+     this.faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
     //main
     var mesh=new THREE.Mesh(new THREE.CubeGeometry(16,24,20), this.faceMaterial);
     mesh.position.y=(24)/2;
@@ -354,24 +355,44 @@ BRICK.tpiece=function(colorCode){
     THREE.Object3D.call( this );  
     faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
     
-    var pipe=new THREE.Mesh(new THREE.CylinderGeometry(2.5,2.5, 26, 32, 4), faceMaterial);
-    pipe.position.y=13;
+    var pipe=new THREE.Mesh(new THREE.CylinderGeometry(2.5,2.5, 22, 32, 4), faceMaterial);
+    pipe.position.y=12;
     pipe.matrixAutoUpdate = false;
     pipe.updateMatrix();
     this.add(pipe);
     
-    var pipe2=new THREE.Mesh(new THREE.CylinderGeometry(2.5,2.5, 9, 32, 4), faceMaterial);
+    var pipeend=new THREE.Mesh(new THREE.CylinderGeometry(2,2.5, 1, 32, 4), faceMaterial);
+    pipeend.position.y=23;
+    pipeend.matrixAutoUpdate = false;
+    pipeend.updateMatrix();
+    this.add(pipeend);
+    
+    var pipeend2=new THREE.Mesh(new THREE.CylinderGeometry(2.5,2, 1, 32, 4), faceMaterial);
+    pipeend2.position.y=2;
+    pipeend2.matrixAutoUpdate = false;
+    pipeend2.updateMatrix();
+    this.add(pipeend2);
+    
+    var pipe2=new THREE.Mesh(new THREE.CylinderGeometry(2.5,2.5, 7, 32, 4), faceMaterial);
     
     pipe2.rotation.x=90 * ( Math.PI / 180 );
-    pipe2.position.z=8;
-    pipe2.position.y=13;
+    pipe2.position.z=6;
+    pipe2.position.y=12;
     pipe2.matrixAutoUpdate = false;
     pipe2.updateMatrix();
     
     this.add(pipe2);
     
+    var pipeend3=new THREE.Mesh(new THREE.CylinderGeometry(2,2.5, 1, 32, 4), faceMaterial);
+    pipeend3.rotation.x=90 * ( Math.PI / 180 );
+    pipeend3.position.z=10;
+    pipeend3.position.y=12;
+    pipeend3.matrixAutoUpdate = false;
+    pipeend3.updateMatrix();
+    this.add(pipeend3);
+    
     var sph=new THREE.Mesh(new THREE.SphereGeometry(4.2, 12, 12), faceMaterial);
-    sph.position.y=13;
+    sph.position.y=12;
     sph.matrixAutoUpdate = false;
     sph.updateMatrix();
     this.add(sph);
@@ -380,3 +401,98 @@ BRICK.tpiece=function(colorCode){
 
 BRICK.tpiece.prototype = new THREE.Object3D();
 BRICK.tpiece.prototype.constructor = BRICK.tpiece;
+
+BRICK.topclip=function(colorCode){
+    THREE.Object3D.call( this );
+    faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
+    
+    this.add(new BRICK.plate(colorCode))
+    
+    var extrudeSettings = { amount: 6, bevelEnabled: false, steps: 1, material: 0, extrudeMaterial: 0 };
+    var clip = new THREE.Shape();
+    
+    clip.moveTo(10,0)
+    clip.lineTo(8,10);
+    clip.lineTo(4,10);
+    clip.lineTo(4,2);
+    clip.lineTo(2,1);
+    clip.lineTo(1,1);
+    clip.lineTo(-2,1);
+    clip.lineTo(-4,2);
+    clip.lineTo(-4,10);
+    clip.lineTo(-8,10);
+    clip.lineTo(-10,0)
+    clip.lineTo(10,0)
+    
+    var geo = clip.extrude( extrudeSettings );
+    geo.computeVertexNormals();
+    
+    THREE.GeometryUtils.center( geo );
+    var mesh=new THREE.Mesh( geo, faceMaterial );
+    mesh.matrixAutoUpdate = false;  
+    mesh.position.y=12;
+    mesh.updateMatrix();
+    this.add(mesh);   
+      
+}
+
+BRICK.topclip.prototype = new THREE.Object3D();
+BRICK.topclip.prototype.constructor = BRICK.topclip;
+
+BRICK.hinge=function(colorCode){
+    
+    THREE.Object3D.call( this );
+    faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
+    
+    var part1=new BRICK.square(colorCode, 1,2,1);
+    part1.rotation.y=135 * ( Math.PI / 180 );
+    part1.position.z=23;
+    part1.position.x=-15;
+    part1.updateMatrix();
+    
+    var part2=new BRICK.square(colorCode, 1,2,1);
+    part2.position.z=-22;
+    
+    this.add(part1);
+    this.add(part2)
+    
+    var hinge=new THREE.Mesh(new THREE.CylinderGeometry(8,8, 8, 32, 4), faceMaterial);
+    hinge.position.x=-10;
+    hinge.position.y=4;
+    
+    this.add(hinge);
+    
+    
+}
+BRICK.hinge.prototype = new THREE.Object3D();
+BRICK.hinge.prototype.constructor = BRICK.hinge;
+
+BRICK.hingepart=function(colorCode){
+    
+    THREE.Object3D.call( this );
+    faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
+    
+    var part1=new BRICK.square(colorCode, 1,2,1);
+    
+    this.add(part1);
+    
+    var hinge=new THREE.Mesh(new THREE.CylinderGeometry(5,5, 4, 32, 4), faceMaterial);
+    hinge.position.x=-8;
+    hinge.position.y=4;    
+    hinge.rotation.z=90 * ( Math.PI / 180 );
+    hinge.position.z=22;
+    this.add(hinge);
+    
+    var hinge2=new THREE.Mesh(new THREE.CylinderGeometry(5,5, 4, 32, 4), faceMaterial);
+    hinge2.position.x=8;
+    hinge2.position.y=4;
+    hinge2.position.z=22;
+    hinge2.rotation.z=90 * ( Math.PI / 180 );
+    
+    this.add(hinge2);
+    
+    
+}
+BRICK.hingepart.prototype = new THREE.Object3D();
+BRICK.hingepart.prototype.constructor = BRICK.hingepart;
+
