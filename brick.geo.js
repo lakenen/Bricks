@@ -70,6 +70,31 @@ BRICK.round=function(colorCode, height){
 BRICK.round.prototype = new THREE.Object3D();
 BRICK.round.prototype.constructor = BRICK.round;
 
+//Cone
+
+BRICK.cone=function(colorCode, height){
+    THREE.Object3D.call( this );
+    	
+    height=height || 24
+    
+    var faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face}); 
+    
+    var mesh=new THREE.Mesh(new THREE.CylinderGeometry(6, 10, height, 32, height), faceMaterial);
+    
+    var mesh2=new THREE.Mesh(new THREE.CylinderGeometry(4, 4, 2, 32, 2), faceMaterial);
+    mesh2.position.y=height/2+1;
+    
+    var mesh3=new THREE.Mesh(new THREE.CylinderGeometry(8, 8, 2, 32, 2), faceMaterial);
+    mesh3.position.y=-(height/2+1);
+    this.add(mesh3);    
+    this.add(mesh2);
+    this.add(mesh);
+    
+}
+
+BRICK.cone.prototype = new THREE.Object3D();
+BRICK.cone.prototype.constructor = BRICK.cone;
+
 //Basic flat plate
 
 BRICK.plate=function(colorCode, w, d){
