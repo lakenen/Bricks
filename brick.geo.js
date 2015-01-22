@@ -161,7 +161,7 @@ BRICK.modSquare=function(colorCode){
 
 }
 
-BRICK.modSquare.prototype = new THREE.Object3D();
+BRICK.modSquare.prototype = Object.create(THREE.Object3D.prototype);
 BRICK.modSquare.prototype.constructor = BRICK.modSquare;
 
 BRICK.modSquare.prototype.getStud=function(height, dia, y){
@@ -175,8 +175,9 @@ BRICK.modSquare.prototype.getStud=function(height, dia, y){
 
 
 BRICK.headlight=function(colorCode){
-    THREE.Object3D.call( this );
-    BRICK.modSquare.call( this );
+    this.prototype = Object.create(BRICK.modSquare);
+    
+    
      this.faceMaterial = new THREE.MeshLambertMaterial({color: BRICK.color(colorCode).face});
     //main
     var mesh=new THREE.Mesh(new THREE.CubeGeometry(16,24,20), this.faceMaterial);
