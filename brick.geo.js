@@ -44,7 +44,7 @@ BRICK.colorCode=function(string){
 
 BRICK.round=function(colorCode, height){
 	
-	THREE.Object3D.call( this );
+this.prototype = Object.create(THREE.Object3D.prototype);
 	
 	height=height || 4
 
@@ -67,7 +67,6 @@ BRICK.round=function(colorCode, height){
 
 }
 
-BRICK.round.prototype = new THREE.Object3D();
 BRICK.round.prototype.constructor = BRICK.round;
 
 //Cone
